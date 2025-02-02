@@ -3,6 +3,7 @@ import random
 PER_HOUR_WAGE = 20
 FULL_DAY_HOURS = 8
 PART_TIME_HOURS = 4
+WORKING_DAYS_PER_MONTH = 20
 
 class EmployeeWage:
     @staticmethod
@@ -12,7 +13,7 @@ class EmployeeWage:
     @staticmethod
     def calculate_daily_wage():
         work_hours = EmployeeWage.get_work_hours()
-
+        
         match work_hours:
             case 0:
                 daily_wage = 0
@@ -23,16 +24,22 @@ class EmployeeWage:
             case 8:
                 daily_wage = PER_HOUR_WAGE * FULL_DAY_HOURS
                 attendance_status = "Full-time"
-            case _:
-                daily_wage = 0
-                attendance_status = "Unknown"
-
+        
         return daily_wage, attendance_status
+    
+    @staticmethod
+    def calculate_monthly_wage():
+        total_wage = 0
+        for _ in range(WORKING_DAYS_PER_MONTH):
+            daily_wage, _ = EmployeeWage.calculate_daily_wage()
+            total_wage += daily_wage
+        return total_wage
 
 print("Welcome to Employee Wage Computation Program")
 
 daily_wage, attendance_status = EmployeeWage.calculate_daily_wage()
+monthly_wage = EmployeeWage.calculate_monthly_wage()
 
-# Output results
 print(f"Employee is {attendance_status}")
 print(f"Daily Wage: ₹{daily_wage}")
+print(f"Total Monthly Wage: ₹{monthly_wage}")
