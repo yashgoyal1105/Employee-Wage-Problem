@@ -11,23 +11,26 @@ class EmployeeWage:
 
     @staticmethod
     def calculate_daily_wage():
-        work_hours = EmployeeWage.get_work_hours() 
-        daily_wage = PER_HOUR_WAGE * work_hours
+        work_hours = EmployeeWage.get_work_hours()
 
-        # Determine attendance status
-        if work_hours == 0:
-            attendance_status = "Absent"
-        elif work_hours == PART_TIME_HOURS:
-            attendance_status = "Part-time"
-        else:
-            attendance_status = "Full-time"
+        match work_hours:
+            case 0:
+                daily_wage = 0
+                attendance_status = "Absent"
+            case 4:
+                daily_wage = PER_HOUR_WAGE * PART_TIME_HOURS
+                attendance_status = "Part-time"
+            case 8:
+                daily_wage = PER_HOUR_WAGE * FULL_DAY_HOURS
+                attendance_status = "Full-time"
+            case _:
+                daily_wage = 0
+                attendance_status = "Unknown"
 
         return daily_wage, attendance_status
 
-# Main program
 print("Welcome to Employee Wage Computation Program")
 
-# Calculate daily wage and attendance status
 daily_wage, attendance_status = EmployeeWage.calculate_daily_wage()
 
 # Output results
