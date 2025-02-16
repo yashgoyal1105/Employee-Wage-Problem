@@ -1,49 +1,55 @@
 import random
 
-class EmployeeWage:
-    PER_HOUR_WAGE = 20
-    FULL_DAY_HOURS = 8
-    PART_TIME_HOURS = 4
-    WORKING_DAYS_PER_MONTH = 20
-    MAX_WORK_HOURS = 100
-    
-    @classmethod
-    def get_work_hours(cls):
-        return random.choice([0, cls.PART_TIME_HOURS, cls.FULL_DAY_HOURS])
+PER_HOUR_WAGE = 20
+FULL_DAY_HOURS = 8
+PART_TIME_HOURS = 4
+WORKING_DAYS_PER_MONTH = 20
+MAX_WORK_HOURS = 100
 
-    @classmethod
-    def calculate_daily_wage(cls):
-        work_hours = cls.get_work_hours()
+class EmployeeWage:
+    """Class to compute employee wages based on attendance and work conditions."""
+    
+    @staticmethod
+    def get_work_hours():
+        """Returns random work hours (0 for absent, 4 for part-time, 8 for full-time)."""
+        return random.choice([0, PART_TIME_HOURS, FULL_DAY_HOURS])
+
+    @staticmethod
+    def calculate_daily_wage():
+        """Calculates daily wage based on work hours and returns wage, status, and hours worked."""
+        work_hours = EmployeeWage.get_work_hours()
         
         match work_hours:
             case 0:
                 daily_wage = 0
                 attendance_status = "Absent"
             case 4:
-                daily_wage = cls.PER_HOUR_WAGE * cls.PART_TIME_HOURS
+                daily_wage = PER_HOUR_WAGE * PART_TIME_HOURS
                 attendance_status = "Part-time"
             case 8:
-                daily_wage = cls.PER_HOUR_WAGE * cls.FULL_DAY_HOURS
+                daily_wage = PER_HOUR_WAGE * FULL_DAY_HOURS
                 attendance_status = "Full-time"
         
         return daily_wage, attendance_status, work_hours
     
-    @classmethod
-    def calculate_monthly_wage(cls):
+    @staticmethod
+    def calculate_monthly_wage():
+        """Calculates and returns total wage for a month assuming 20 working days."""
         total_wage = 0
-        for _ in range(cls.WORKING_DAYS_PER_MONTH):
-            daily_wage, _, _ = cls.calculate_daily_wage()
+        for _ in range(WORKING_DAYS_PER_MONTH):
+            daily_wage, _, _ = EmployeeWage.calculate_daily_wage()
             total_wage += daily_wage
         return total_wage
     
-    @classmethod
-    def calculate_wage_with_condition(cls):
+    @staticmethod
+    def calculate_wage_with_condition():
+        """Calculates total wage considering max work hours (100) or max working days (20)."""
         total_wage = 0
         total_work_hours = 0
         total_working_days = 0
         
-        while total_work_hours < cls.MAX_WORK_HOURS and total_working_days < cls.WORKING_DAYS_PER_MONTH:
-            daily_wage, _, work_hours = cls.calculate_daily_wage()
+        while total_work_hours < MAX_WORK_HOURS and total_working_days < WORKING_DAYS_PER_MONTH:
+            daily_wage, _, work_hours = EmployeeWage.calculate_daily_wage()
             total_wage += daily_wage
             total_work_hours += work_hours
             total_working_days += 1
